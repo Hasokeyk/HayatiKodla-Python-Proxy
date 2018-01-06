@@ -16,8 +16,8 @@ app = Flask(__name__)
 
 def is_http_url(s):
     try:
-        url = urlparse(s)
-        if url.scheme:
+        url = urlparse(s.strip())
+        if url.scheme and url.path:
             return True
         else:
             return False
@@ -42,7 +42,7 @@ def index():
             except Exception as hata:
                 return "500 Siteye Bağlanamadı. Linki kontrol edin."
         else:
-            return '502 Domain Geçerli Değil ÖRN. https://www.hayatikodla.net olarak gönderin'+domain
+            return "502 Domain Geçerli Değil ÖRN. https://www.hayatikodla.net olarak gönderin."
     else:
         return "503 Domain Parametresi Bulunamadı"
 
