@@ -28,11 +28,21 @@ def is_http_url(s):
 
 @app.route('/', methods=['GET','POST'])
 def index():
-    domain = request.args.get('domain')
+    if request.method == 'POST':
+        domain = request.form['domain']
+    else:
+        domain = request.args.get('domain')
+        
     if domain is not None:
         if is_http_url(domain):
-            text = requests.get(domain)
-            return text.text
+            try:
+                text = requests.get(domain)
+                if text.status_code == 200:
+                    return text.text
+                else:
+                    return "501 Sitede bağlantı sorunu var"
+            except:
+                return "500 Siteye Bağlanamadı. Linki kontrol edin"
         else:
             return '502 Domain Geçerli Değil ÖRN. https://www.hayatikodla.net olarak gönderin'
     else:
