@@ -42,7 +42,7 @@ def index():
             except Exception as hata:
                 return "500 Siteye Bağlanamadı. Linki kontrol edin."
         else:
-            return '502 Domain Geçerli Değil ÖRN. https://www.hayatikodla.net olarak gönderin'
+            return '502 Domain Geçerli Değil ÖRN. https://www.hayatikodla.net olarak gönderin'+domain
     else:
         return "503 Domain Parametresi Bulunamadı"
 
