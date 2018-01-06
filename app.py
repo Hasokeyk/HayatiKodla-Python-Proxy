@@ -38,7 +38,7 @@ def index():
                 if text.status_code == 200:
                     return text.text
                 else:
-                    return "501 Sitede bağlantı sorunu var"
+                    return "501 Sitede bağlantı sorunu var. Status Code : "+text.status_code
             except Exception as hata:
                 return "500 Siteye Bağlanamadı. Linki kontrol edin."
         else:
