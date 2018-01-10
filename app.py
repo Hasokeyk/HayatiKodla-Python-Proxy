@@ -30,7 +30,11 @@ def is_http_url(s):
             return False
     except Exception as Hata:
         return False
- 
+
+@app.route('/debug', methods=['GET','POST'])
+def debug():
+    return 'V1.1.0'
+        
 @app.route('/', methods=['GET','POST'])
 def index():
     if request.method == 'POST':
@@ -68,8 +72,6 @@ def index():
         userAgent = 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Mobile Safari/537.36'
     else:
         userAgent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'
-    
-    print(type,userAgent)
     
     if domain is not None:
         if is_http_url(domain):
