@@ -7,6 +7,7 @@ from flask import abort
 import urllib
 import requests
 import re
+from selenium import webdriver
 try:
     from urllib.parse import urlparse
 except ImportError:
@@ -34,7 +35,7 @@ def is_http_url(s):
 
 @app.route('/debug', methods=['GET','POST'])
 def debug():
-    return 'V1.1.0'
+    return 'V1.2.0'
         
 @app.route('/', methods=['GET','POST'])
 def index():
