@@ -24,7 +24,8 @@ app = Flask(__name__)
 def is_http_url(s):
     try:
         url = urlparse(s.strip())
-        if url.scheme and url.path:
+        print(url)
+        if url.scheme and url.netloc:
             return True
         else:
             return False
