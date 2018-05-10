@@ -7,7 +7,9 @@ from flask import abort
 import urllib
 import requests
 import re
-from selenium import webdriver
+#from selenium import webdriver
+import sys
+
 try:
     from urllib.parse import urlparse
 except ImportError:
@@ -25,7 +27,6 @@ app = Flask(__name__)
 def is_http_url(s):
     try:
         url = urlparse(s.strip())
-        print(url)
         if url.scheme and url.netloc:
             return True
         else:
@@ -35,8 +36,19 @@ def is_http_url(s):
 
 @app.route('/debug', methods=['GET','POST'])
 def debug():
-    return 'V1.2.0'
-        
+    return 'V1.2.1'
+
+@app.errorhandler(404)
+def not_found(error=None):
+    message = {
+            'status': 404,
+            'message': 'Not Found: ' + request.url,
+    }
+    resp = jsonify(message)
+    resp.status_code = 404
+
+    return resp
+    
 @app.route('/', methods=['GET','POST'])
 def index():
     if request.method == 'POST':
@@ -84,7 +96,7 @@ def index():
                 else:
                     return "501 Sitede bağlantı sorunu var. Status Code : "+text.status_code
             except Exception as hata:
-                return "500 Siteye Bağlanamadı. Linki kontrol edin."+text.status_code
+                return "500 Siteye Bağlanamadı. Linki kontrol edin."
         else:
             return "502 Domain Geçerli Değil ÖRN. https://www.hayatikodla.net olarak gönderin."
     else:
