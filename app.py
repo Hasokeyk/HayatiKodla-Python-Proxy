@@ -7,6 +7,7 @@ from flask import abort
 import urllib
 import requests
 import re
+import time
 from fake_useragent import UserAgent
 #from selenium import webdriver
 import sys
@@ -21,6 +22,9 @@ except ImportError:
 domain = None
 mobil  = None
 ua = UserAgent(verify_ssl=False)
+milli_sec = str(int(round(time.time() * 1000)))
+ip = '{}.{}.{}.{}'.format(*__import__('random').sample(range(0,255),4))
+#session = requests.Session()
 #Değişkenler
 
 app = Flask(__name__)
@@ -77,13 +81,20 @@ def index():
     else:
         #userAgent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'
         userAgent = ua.random
+        #print(userAgent)
     
     if domain is not None:
         if is_http_url(domain):
             try:
-                r = requests.get(domain,headers={'User-agent':userAgent})
+                r = requests.get(domain,headers={
+                    'User-agent':userAgent,
+                    'Accept-Language':'tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7,es;q=0.6,de;q=0.5,nl;q=0.4,ru;q=0.3',
+                    'referer' : 'https://www.google.com.tr/',
+                    'x-client-data' : 'CJe2yQEIprbJAQjEtskBCLmYygEIqZ3KAQioo8oB',
+                    'cookie' : 'DV=Q0vqGf2XXzMcoPugrFVU4Mb93Tf2NBY; NID=129=A5py2_9_iONmVVt5wcmppBy4f1ddllDcULvxZU9BWAg-dICt2PT6nH0B_BPk3rUA5XfCsh-JCd45gxanOkqGYwPGF48L9_KXPuvTFcrJmjt1OGbKEHcfBssn-0XxAfPw0V3iYy5TGb23k1wYePvU; 1P_JAR=2018-5-11-13',
+                })
                 if r.status_code == 200:
-                    return str(r.text)
+                    return str(r.content.decode('utf8'))
                 else:
                     return "501 Sitede bağlantı sorunu var. Status Code : "+str(r.status_code)
             except ValueError as hata:
