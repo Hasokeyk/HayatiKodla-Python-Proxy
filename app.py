@@ -41,7 +41,7 @@ def is_http_url(s):
 
 @app.route('/debug', methods=['GET','POST'])
 def debug():
-    return 'V1.2.2'
+    return 'V1.2.3'
     
 @app.route('/', methods=['GET','POST'])
 def index():
