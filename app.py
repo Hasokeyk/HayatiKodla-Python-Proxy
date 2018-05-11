@@ -1,4 +1,4 @@
-#  -*- coding: utf-8 -*-
+﻿#  -*- coding: utf-8 -*-
 
 #Kütüphanaler
 from flask import Flask
@@ -7,9 +7,9 @@ from flask import abort
 import urllib
 import requests
 import re
+from fake_useragent import UserAgent
 #from selenium import webdriver
 import sys
-
 try:
     from urllib.parse import urlparse
 except ImportError:
@@ -20,6 +20,7 @@ except ImportError:
 #Değişkenler
 domain = None
 mobil  = None
+ua = UserAgent(verify_ssl=False)
 #Değişkenler
 
 app = Flask(__name__)
@@ -37,17 +38,6 @@ def is_http_url(s):
 @app.route('/debug', methods=['GET','POST'])
 def debug():
     return 'V1.2.1'
-
-@app.errorhandler(404)
-def not_found(error=None):
-    message = {
-            'status': 404,
-            'message': 'Not Found: ' + request.url,
-    }
-    resp = jsonify(message)
-    resp.status_code = 404
-
-    return resp
     
 @app.route('/', methods=['GET','POST'])
 def index():
@@ -86,16 +76,18 @@ def index():
         userAgent = 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Mobile Safari/537.36'
     else:
         userAgent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'
+        #userAgent = ua
     
     if domain is not None:
         if is_http_url(domain):
             try:
-                text = requests.get(domain,headers={'User-agent':userAgent})
-                if text.status_code == 200:
-                    return text.text
+                r = requests.get(domain,headers={'User-agent':userAgent})
+                if r.status_code == 200:
+                    return str(r.text)
                 else:
-                    return "501 Sitede bağlantı sorunu var. Status Code : "+text.status_code
-            except Exception as hata:
+                    return "501 Sitede bağlantı sorunu var. Status Code : "+str(r.status_code)
+            except ValueError as hata:
+                print(hata)
                 return "500 Siteye Bağlanamadı. Linki kontrol edin."
         else:
             return "502 Domain Geçerli Değil ÖRN. https://www.hayatikodla.net olarak gönderin."
