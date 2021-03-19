@@ -16,7 +16,7 @@ gunicorn==19.7.1
 httplib2==0.10.3
 idna==2.6
 itsdangerous==0.24
-Jinja2==2.10
+Jinja2==2.11.3
 jsonify==0.5
 keyring==10.3.2
 lxml==4.1.1
